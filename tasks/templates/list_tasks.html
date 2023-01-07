@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body>
+    <div class="content">
+        <h1>Django Tasks Manager</h1>
+        <button class="btn btn-primary" onclick="create_task()">Create Task</button>
+    </div>
+
+    <br/>
+
+    <div class="container">
+        {% for task in tasks %}
+        <div class="task">
+            <h3>{{ task.title }}</h3>
+            <p>{{ task.description }}</p>
+            <label for="completed">Completed: </label>
+            <input type="checkbox" name="completed" id="completed" {% if task.completed %} checked="" {% endif %}>
+            <a class="btn" href="/tasks/delete/{{ task.id }}">Delete</a>
+            <a class="btn" href="/tasks/update/{{ task.id }}">Update</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="container wrapper" id="create_wrapper">
+        <div class="form">
+            <form action="{% url 'create_tasks' %}" method="POST">
+                <h2>Create Task</h2>
+                {% csrf_token %}
+                <input type="text" name="title" id="title" placeholder="write a title">
+                <label for="description">Description: </label><textarea name="description" id="description" cols="30" rows="10"></textarea>
+                <label for="completed">Completed: </label><input type="checkbox" name="completed" id="completed">
+                <button type="submit">Save</button>
+            </form>
+            <button onclick="close_task_creator()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        create_task = () => {
+            document.getElementById("create_wrapper").classList.add("active");
+        };
+
+        close_task_creator = () => {
+            document.getElementById("create_wrapper").classList.remove("active");
+        };
+    </script>
+</body>
+
+</html>
